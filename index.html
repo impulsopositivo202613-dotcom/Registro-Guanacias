@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Controla tus jornadas de delivery, ingresos, gastos, kilometraje y mantenimiento de tu moto.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Sclintex | Control de jornadas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="install-banner hidden" id="installBanner"><div class="install-banner-copy"><strong>Instala Sclintex en tu teléfono</strong><small>Acceso directo y uso sin conexión.</small></div><button class="primary-button" id="installButton"><i data-lucide="download"></i> Instalar</button><button class="install-dismiss" id="dismissInstall" aria-label="Cerrar aviso"><i data-lucide="x"></i></button></div>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="Sclintex inicio">
+        <span class="brand-mark">S</span>
+        <span class="brand-copy"><strong>Sclintex</strong><small>CONTROL DE JORNADAS</small></span>
+      </a>
+      <div class="side-label">MENÚ PRINCIPAL</div>
+      <nav class="navigation" aria-label="Navegación principal">
+        <button class="nav-item active" data-view="dashboard"><i data-lucide="layout-dashboard"></i><span>Resumen</span></button>
+        <button class="nav-item" data-view="jornada"><i data-lucide="bike"></i><span>Jornada diaria</span></button>
+        <button class="nav-item" data-view="historial"><i data-lucide="calendar-days"></i><span>Historial</span></button>
+        <button class="nav-item" data-view="mantenimiento"><i data-lucide="wrench"></i><span>Mantenimiento</span><span class="nav-dot" id="maintenanceNavDot"></span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item" data-view="ajustes"><i data-lucide="settings-2"></i><span>Configuración</span></button>
+        <div class="sidebar-tip">
+          <span class="tip-icon"><i data-lucide="shield-check"></i></span>
+          <strong>Tus datos, bajo tu control</strong>
+          <p>Los registros se guardan en este dispositivo.</p>
+        </div>
+        <div class="profile-mini"><span class="avatar">S</span><span><strong>Mi cuenta</strong><small>Panel personal</small></span></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="menuToggle" aria-label="Abrir menú"><i data-lucide="menu"></i></button>
+        <div class="breadcrumb"><span>Espacio de trabajo</span><i data-lucide="chevron-right"></i><strong id="breadcrumbCurrent">Resumen</strong></div>
+        <div class="top-actions">
+          <button class="icon-button notification-button" id="notificationButton" aria-label="Ver avisos"><i data-lucide="bell"></i><span class="notification-dot" id="notificationDot"></span></button>
+          <span class="today-label" id="todayLabel"></span>
+        </div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="page-heading">
+          <div><p class="eyebrow" id="welcomeDate">TU ACTIVIDAD</p><h1>Hola, vamos a rodar.</h1><p class="subheading">Este es el resumen de tu trabajo y tus objetivos.</p></div>
+          <button class="primary-button" id="dashboardStart"><i data-lucide="play"></i> Iniciar jornada</button>
+        </div>
+
+        <div class="goal-panel">
+          <div class="goal-main">
+            <div class="goal-title"><span class="goal-icon"><i data-lucide="target"></i></span><div><small>META DE ESTE MES</small><strong id="goalAmount">S/ 1,600.00</strong></div></div>
+            <div class="goal-progress-copy"><strong id="goalPercent">0%</strong><span id="goalRemaining">Te faltan S/ 1,600.00 para alcanzar tu meta</span></div>
+            <div class="progress-track"><span id="goalProgress"></span></div>
+          </div>
+          <div class="goal-side"><span>Ingresos acumulados</span><strong id="goalIncome">S/ 0.00</strong><small id="goalPeriod">Mes actual</small></div>
+        </div>
+
+        <div class="section-heading"><div><h2>Resumen financiero</h2><p>Indicadores del mes en curso</p></div><span class="period-pill"><i data-lucide="calendar"></i><span id="currentMonthLabel"></span></span></div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Generado al mes</span><span class="stat-icon purple"><i data-lucide="wallet"></i></span></div><strong id="statIncome">S/ 0.00</strong><small class="stat-foot">Ingresos registrados</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Ganancia neta</span><span class="stat-icon green"><i data-lucide="trending-up"></i></span></div><strong id="statNet">S/ 0.00</strong><small class="stat-foot">Ingresos menos gasolina y gastos</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Gasolina del mes</span><span class="stat-icon orange"><i data-lucide="fuel"></i></span></div><strong id="statFuel">S/ 0.00</strong><small class="stat-foot">Combustible registrado</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Kilometraje del mes</span><span class="stat-icon blue"><i data-lucide="route"></i></span></div><strong id="statKm">0 km</strong><small class="stat-foot">Distancia recorrida</small></article>
+        </div>
+
+        <div class="dashboard-columns">
+          <section class="panel recent-panel"><div class="panel-heading"><div><h2>Jornadas recientes</h2><p>Tu actividad más reciente</p></div><button class="text-button" data-go="historial">Ver historial <i data-lucide="arrow-up-right"></i></button></div><div id="recentList" class="recent-list"></div></section>
+          <section class="panel maintenance-card"><div class="panel-heading"><div><h2>Mantenimiento de moto</h2><p>Control de cambio de aceite</p></div><span class="soft-icon"><i data-lucide="wrench"></i></span></div><div class="maintenance-status" id="maintenanceStatus"></div><div class="maintenance-meter"><div class="meter-label"><span>Progreso del intervalo</span><strong id="maintenanceProgressText">0 / 4,000 km</strong></div><div class="progress-track"><span id="maintenanceProgress"></span></div></div><button class="secondary-button full-width" data-go="mantenimiento">Ver mantenimiento <i data-lucide="arrow-right"></i></button></section>
+        </div>
+      </section>
+
+      <section class="view" id="view-jornada">
+        <div class="page-heading"><div><p class="eyebrow">REGISTRO DIARIO</p><h1>Jornada de trabajo</h1><p class="subheading">Registra tu salida y cierra el día cuando termines.</p></div><span class="date-chip" id="workDate"></span></div>
+        <div class="work-grid">
+          <section class="panel journey-panel">
+            <div class="journey-head"><div><span class="live-indicator" id="journeyIndicator"></span><span class="journey-state" id="journeyState">Sin jornada activa</span></div><span class="journey-date" id="journeyDate"></span></div>
+            <div id="journeyStartBlock">
+              <div class="illustration-icon"><i data-lucide="bike"></i></div><h2>¿Listo para empezar?</h2><p class="form-intro">Registra el kilometraje que marca tu moto al comenzar. El kilometraje final lo ingresarás al terminar.</p>
+              <form id="startForm" class="form-stack">
+                <label>Kilometraje inicial <span class="required">*</span><div class="input-with-suffix"><input id="startOdometer" type="number" min="0" step="0.1" placeholder="Ej. 8,900" required><span>km</span></div></label>
+                <label>Nota de inicio <span class="optional">(opcional)</span><input id="startNote" type="text" maxlength="120" placeholder="Ej. Turno de mañana"></label>
+                <button class="primary-button full-width" type="submit"><i data-lucide="play"></i> Comenzar jornada</button>
+              </form>
+            </div>
+            <div id="journeyActiveBlock" class="hidden">
+              <div class="active-banner"><span class="pulse-dot"></span><div><strong>¡Jornada en curso!</strong><small>Recuerda cerrar tu jornada al terminar.</small></div></div>
+              <div class="active-details"><div><small>HORA DE INICIO</small><strong id="activeStartTime">--:--</strong></div><div><small>KILOMETRAJE INICIAL</small><strong id="activeStartKm">0 km</strong></div></div>
+              <form id="endForm" class="form-stack">
+                <div class="form-divider"><span>CIERRE DE JORNADA</span></div>
+                <label>Kilometraje final <span class="required">*</span><div class="input-with-suffix"><input id="endOdometer" type="number" min="0" step="0.1" placeholder="Ej. 8,965" required><span>km</span></div><small class="field-hint">Debe ser igual o mayor al kilometraje inicial.</small></label>
+                <div class="form-two"><label>Ingresos del día (S/) <span class="required">*</span><input id="dayIncome" type="number" min="0" step="0.01" placeholder="0.00" required></label><label>Gasolina (S/)<input id="dayFuel" type="number" min="0" step="0.01" placeholder="0.00" value="0"></label></div>
+                <label>Otros gastos (S/) <span class="optional">(opcional)</span><input id="dayOther" type="number" min="0" step="0.01" placeholder="0.00" value="0"></label>
+                <label>Nota de cierre <span class="optional">(opcional)</span><input id="endNote" type="text" maxlength="160" placeholder="Ej. Lluvia, mantenimiento, etc."></label>
+                <div class="close-preview"><span>Ganancia neta estimada</span><strong id="closeNetPreview">S/ 0.00</strong></div>
+                <button class="primary-button full-width" type="submit"><i data-lucide="check-circle-2"></i> Finalizar y guardar jornada</button>
+              </form>
+            </div>
+          </section>
+          <aside class="panel day-guide"><span class="guide-icon"><i data-lucide="lightbulb"></i></span><h3>Un registro sencillo</h3><ul><li><i data-lucide="check"></i><span>Al iniciar solo necesitas tu kilometraje inicial.</span></li><li><i data-lucide="check"></i><span>Al finalizar ingresas kilometraje final, ingresos y gastos.</span></li><li><i data-lucide="check"></i><span>La distancia y la ganancia neta se calculan automáticamente.</span></li></ul><div class="guide-note"><i data-lucide="info"></i><span>No puedes abrir otra jornada mientras exista una activa.</span></div></aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-historial">
+        <div class="page-heading"><div><p class="eyebrow">TUS REGISTROS</p><h1>Historial de jornadas</h1><p class="subheading">Consulta y descarga el detalle de tu actividad.</p></div><button class="primary-button" id="exportCsv"><i data-lucide="download"></i> Descargar mes (CSV)</button></div>
+        <div class="panel history-panel">
+          <div class="history-toolbar"><div class="month-picker"><button class="icon-button small" id="prevMonth" aria-label="Mes anterior"><i data-lucide="chevron-left"></i></button><strong id="historyMonth"></strong><button class="icon-button small" id="nextMonth" aria-label="Mes siguiente"><i data-lucide="chevron-right"></i></button></div><div class="history-actions"><button class="secondary-button" id="exportJson"><i data-lucide="database"></i> Copia de seguridad</button></div></div>
+          <div class="history-summary" id="historySummary"></div>
+          <div class="table-wrap"><table><thead><tr><th>FECHA</th><th>HORARIO</th><th>KM RECORRIDOS</th><th>INGRESOS</th><th>GASTOS</th><th>GANANCIA NETA</th><th></th></tr></thead><tbody id="historyTable"></tbody></table></div>
+          <div class="empty-state hidden" id="historyEmpty"><i data-lucide="clipboard-list"></i><strong>No hay jornadas en este mes</strong><span>Cuando registres tus jornadas, aparecerán aquí.</span></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-mantenimiento">
+        <div class="page-heading"><div><p class="eyebrow">CUIDADO DE TU MOTO</p><h1>Mantenimiento</h1><p class="subheading">Lleva el control del kilometraje para tu próximo cambio de aceite.</p></div><button class="secondary-button" data-go="ajustes"><i data-lucide="settings-2"></i> Configurar intervalo</button></div>
+        <div class="maintenance-layout">
+          <section class="panel oil-panel"><div class="oil-top"><span class="soft-icon large"><i data-lucide="droplet"></i></span><span class="status-pill" id="oilStatusPill">En seguimiento</span></div><p class="eyebrow">PRÓXIMO CAMBIO DE ACEITE</p><h2 id="oilRemaining">4,000 km</h2><p class="subheading" id="oilDescription">Kilómetros restantes para tu próximo cambio.</p><div class="maintenance-meter"><div class="meter-label"><span>Distancia desde el último cambio</span><strong id="oilProgressText">0 / 4,000 km</strong></div><div class="progress-track tall"><span id="oilProgress"></span></div></div><div class="oil-stats"><div><small>Último cambio registrado</small><strong id="lastOilDate">Sin registrar</strong></div><div><small>Intervalo configurado</small><strong id="oilInterval">4,000 km</strong></div></div><button class="primary-button full-width" id="oilChanged"><i data-lucide="check-circle-2"></i> Ya cambié el aceite · Reiniciar contador</button></section>
+          <section class="panel maintenance-info"><h3><i data-lucide="bell-ring"></i> Avisos de mantenimiento</h3><div id="maintenanceAlert" class="alert-box"></div><div class="info-row"><span class="info-icon"><i data-lucide="gauge"></i></span><div><strong>Contador automático</strong><p>Se suman los kilómetros de cada jornada cerrada desde el último cambio de aceite.</p></div></div><div class="info-row"><span class="info-icon"><i data-lucide="rotate-ccw"></i></span><div><strong>Reinicio al cambiar aceite</strong><p>Al confirmar el cambio, el contador vuelve a cero y se guarda la fecha y el kilometraje.</p></div></div><div class="info-row"><span class="info-icon"><i data-lucide="sliders-horizontal"></i></span><div><strong>Intervalo configurable</strong><p>Puedes cambiar los kilómetros del intervalo desde Configuración.</p></div></div></section>
+        </div>
+      </section>
+
+      <section class="view" id="view-ajustes">
+        <div class="page-heading"><div><p class="eyebrow">PERSONALIZA TU EXPERIENCIA</p><h1>Configuración</h1><p class="subheading">Ajusta tus objetivos y preferencias de seguimiento.</p></div></div>
+        <div class="settings-grid">
+          <section class="panel settings-panel"><div class="settings-title"><span class="settings-icon purple"><i data-lucide="target"></i></span><div><h3>Meta mensual</h3><p>Define cuánto quieres generar cada mes.</p></div></div><form id="goalForm" class="settings-form"><label>Objetivo de ingresos (S/)<input id="monthlyGoal" type="number" min="0" step="0.01" required></label><button class="primary-button" type="submit">Guardar meta</button></form></section>
+          <section class="panel settings-panel"><div class="settings-title"><span class="settings-icon orange"><i data-lucide="oil-can"></i></span><div><h3>Mantenimiento de aceite</h3><p>Configura cada cuántos kilómetros realizas el cambio.</p></div></div><form id="intervalForm" class="settings-form"><label>Intervalo de cambio (km)<input id="serviceInterval" type="number" min="100" step="100" required><small class="field-hint">Ejemplo: 4,000 km. El contador se calcula según tus jornadas.</small></label><label>Kilometraje del último cambio de aceite<input id="lastServiceOdometer" type="number" min="0" step="0.1" placeholder="Ej. 8,000"><small class="field-hint">Indica en qué kilometraje cambiaste el aceite por última vez. Así el contador comienza desde el punto correcto.</small></label><button class="primary-button" type="submit">Guardar mantenimiento</button></form></section>
+          <section class="panel settings-panel"><div class="settings-title"><span class="settings-icon blue"><i data-lucide="gauge"></i></span><div><h3>Odómetro actual</h3><p>Referencia para mostrar el kilometraje de tu moto.</p></div></div><form id="odometerForm" class="settings-form"><label>Kilometraje actual (km)<input id="currentOdometer" type="number" min="0" step="0.1" placeholder="Ej. 8,900"></label><small class="field-hint">Se actualiza automáticamente al cerrar jornadas. Puedes corregirlo aquí si hace falta.</small><button class="primary-button" type="submit">Actualizar kilometraje</button></form></section>
+          <section class="panel settings-panel"><div class="settings-title"><span class="settings-icon green"><i data-lucide="database"></i></span><div><h3>Datos y respaldo</h3><p>Exporta una copia para conservar tus registros.</p></div></div><div class="backup-actions"><button class="secondary-button" id="settingsExport"><i data-lucide="download"></i> Descargar respaldo</button><label class="secondary-button file-button"><i data-lucide="upload"></i> Restaurar respaldo<input type="file" id="importBackup" accept="application/json"></label></div><p class="field-hint">Los datos se almacenan en el navegador de este dispositivo. Descarga respaldos periódicamente.</p></section>
+        </div>
+        <div class="danger-zone panel"><div><strong>Zona de cuidado</strong><p>Eliminar todos los datos es irreversible. Descarga un respaldo antes de continuar.</p></div><button class="danger-button" id="clearData"><i data-lucide="trash-2"></i> Borrar todos los datos</button></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+  <dialog class="modal" id="detailModal"><form method="dialog"><button class="modal-close" aria-label="Cerrar"><i data-lucide="x"></i></button></form><div id="detailContent"></div></dialog>
+  <dialog class="modal confirm-modal" id="confirmModal"><div class="confirm-icon"><i data-lucide="alert-circle"></i></div><h3 id="confirmTitle">¿Confirmas esta acción?</h3><p id="confirmMessage"></p><div class="modal-actions"><button class="secondary-button" id="confirmCancel">Cancelar</button><button class="danger-button" id="confirmAccept">Confirmar</button></div></dialog>
+  <script src="script.js"></script>
+  <script src="pwa.js"></script>
+</body>
+</html>
